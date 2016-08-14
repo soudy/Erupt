@@ -24,7 +24,7 @@
 #define ERUPT_H
 
 #ifndef _GNU_SOURCE
-#define _GNU_SOURCE /* strndup */
+# define _GNU_SOURCE /* strndup */
 #endif
 
 #include <stdbool.h>
@@ -68,8 +68,8 @@ extern char *TARGET_FILE;
 
 void *smalloc(size_t size);
 void *scalloc(size_t n, size_t size);
-void set_output_name(char *filename);
-char *unquote(char *s);
+void set_output_name(const char *filename);
+char *unquote(const char *s);
 void verbose_printf(const char *fmt, ...);
 void warning_printf(const char *m, size_t line, const char *fmt, ...);
 void error_printf(const char *m, size_t line, const char *fmt, ...);

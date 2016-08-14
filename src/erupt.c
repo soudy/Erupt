@@ -49,7 +49,7 @@ void *scalloc(size_t n, size_t size)
     return chunk;
 }
 
-void set_output_name(char *filename)
+void set_output_name(const char *filename)
 {
     TARGET_FILE = filename;
     char *result = strdup(filename);
@@ -66,7 +66,7 @@ void set_output_name(char *filename)
         OUTPUT_NAME = result;
 }
 
-char *unquote(char *s)
+char *unquote(const char *s)
 {
     if (*s != '"')
         return s;

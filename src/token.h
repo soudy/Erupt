@@ -108,7 +108,7 @@ typedef struct token {
 
 #define NULL_TOKEN (Token) { ERROR, NULL, 0, 0, 0, NULL, NULL }
 
-Token *new_token(TokenType type, char *value, size_t start, size_t end,
+Token *new_token(TokenType type, const char *value, size_t start, size_t end,
                  size_t line_n);
 void dump_tokens(Token *tok);
 char *token_to_string(TokenType type);

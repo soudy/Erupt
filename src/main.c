@@ -30,20 +30,20 @@ static int get_options(int argc, char *argv[]);
 static char *read_path(const char *path);
 static char *read_file(const FILE *handler);
 
-const char *USAGE =
-    "Usage: erupt [options] file\n"
-    "       -o, --output\n"
-    "               set output path (default: main)\n"
-    "       -v, --version\n"
-    "               show version\n"
-    "       -V, --verbose\n"
-    "               verbose mode\n"
-    "       -t, --tokens\n"
-    "               show generated token stream\n"
-    "       -a, --ast\n"
-    "               show nodes of the generated AST\n"
-    "       -h, --help\n"
-    "               show this\n";
+#define USAGE                                          \
+    "Usage: erupt [options] file\n"                    \
+    "       -o, --output\n"                            \
+    "               set output path (default: main)\n" \
+    "       -v, --version\n"                           \
+    "               show version\n"                    \
+    "       -V, --verbose\n"                           \
+    "               verbose mode\n"                    \
+    "       -t, --tokens\n"                            \
+    "               show generated token stream\n"     \
+    "       -a, --ast\n"                               \
+    "               show nodes of the generated AST\n" \
+    "       -h, --help\n"                              \
+    "               show this\n"
 
 int main(int argc, char *argv[])
 {
@@ -159,10 +159,9 @@ static char *read_path(const char *path)
 
 static char *read_file(const FILE *handler)
 {
-    char *buffer = NULL;
+    char *buffer = smalloc(MAX_FILE_SIZE);
     size_t read = 0;
 
-    buffer = smalloc(MAX_FILE_SIZE);
     read = fread(buffer, sizeof(char), MAX_FILE_SIZE, handler);
 
     buffer[read] = '\0';

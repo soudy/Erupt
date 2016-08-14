@@ -43,7 +43,7 @@ AstNode *create_float(float v)
     return node;
 }
 
-AstNode *create_string(char *v)
+AstNode *create_string(const char *v)
 {
     AstNode *node = smalloc(sizeof(AstNode));
 
@@ -63,33 +63,30 @@ AstNode *create_array(AstNodeList *values)
     return node;
 }
 
-AstNode *create_var(char *name, char *data_type, bool mutable, AstNode *v)
+AstNode *create_var(const char *name, bool mutable, AstNode *v)
 {
     AstNode *node = smalloc(sizeof(AstNode));
 
     node->type = TYPE_VAR;
     node->var.name = strdup(name);
-    node->var.data_type = strdup(data_type);
     node->var.mutable = mutable;
     node->var.v = v;
 
     return node;
 }
 
-AstNode *create_fn_proto(char *name, AstNodeList *args, char *data_type)
+AstNode *create_fn_proto(const char *name, AstNodeList *args)
 {
     AstNode *node = smalloc(sizeof(AstNode));
 
     node->type = TYPE_PROTO;
     node->prototype.name = strdup(name);
-    node->prototype.data_type = strdup(data_type);
-
     node->prototype.args = args;
 
     return node;
 }
 
-AstNode *create_struct(char *name, AstNodeList *fields)
+AstNode *create_struct(const char *name, AstNodeList *fields)
 {
     AstNode *node = smalloc(sizeof(AstNode));
 
@@ -111,7 +108,7 @@ AstNode *create_fn(AstNode *prototype, AstNodeList *body)
     return node;
 }
 
-AstNode *create_call(char *name, AstNodeList *args)
+AstNode *create_call(const char *name, AstNodeList *args)
 {
     AstNode *node = smalloc(sizeof(AstNode));
 
@@ -272,12 +269,11 @@ static void dump_node(AstNode *node)
         dump_node_list(node->array.values);
         break;
     case TYPE_VAR:
-        printf("variable:\n\tname: %s\n\ttype: %s\n\tmutable:%d\n",
-               node->var.name, node->var.data_type, node->var.mutable);
+        printf("variable:\n\tname: %s\n\tmutable:%d\n",
+               node->var.name, node->var.mutable);
         break;
     case TYPE_PROTO:
-        printf("proto:\n\tname: %s\n\ttype: %s\n", node->prototype.name,
-               node->prototype.data_type);
+        printf("proto:\n\tname: %s\n", node->prototype.name);
         break;
     case TYPE_STRUCT:
         /* TODO */

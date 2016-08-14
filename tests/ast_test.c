@@ -36,12 +36,9 @@ MU_TEST(number)
 
 MU_TEST(var)
 {
-    AstNode *node = create_var("i", "int32", true, create_int(256));
+    AstNode *node = create_var("i", true, create_int(256));
 
-    mu_assert(node->type == TYPE_VAR, "node->type should be TYPE_VAR");
     mu_assert(strcmp(node->var.name, "i") == 0, "var.name doesn't match");
-    mu_assert(strcmp(node->var.data_type, "int32") == 0,
-              "var.data_type doesn't match");
     mu_assert(node->var.mutable == true, "var.mutable doesn't match");
     mu_assert(node->var.v->type == TYPE_INT, "var.v->type doesn't match");
 
@@ -50,13 +47,11 @@ MU_TEST(var)
 
 MU_TEST(function)
 {
-    AstNode *node = create_fn_proto("main", NULL, "none");
+    AstNode *node = create_fn_proto("main", NULL);
 
     mu_assert(node->type == TYPE_PROTO, "node->type should be TYPE_PROTO");
     mu_assert(strcmp(node->prototype.name, "main") == 0,
               "proto.name doesn't match");
-    mu_assert(strcmp(node->prototype.data_type, "none") == 0,
-              "proto.data_type doesn't match");
 
     AstNode *function = create_fn(node, NULL);
 

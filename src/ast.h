@@ -74,7 +74,6 @@ struct AstArray {
 
 struct AstVar {
     char *name;
-    char *data_type;
     bool mutable;
     AstNode *v;
 };
@@ -82,7 +81,6 @@ struct AstVar {
 struct AstPrototype {
     char *name;
     AstNodeList *args;
-    char *data_type;
 };
 
 struct AstStruct {
@@ -158,11 +156,11 @@ AstNode *create_int(int v);
 AstNode *create_float(float v);
 AstNode *create_string(char *v);
 AstNode *create_array(AstNodeList *values);
-AstNode *create_var(char *name, char *data_type, bool mutable, AstNode *v);
-AstNode *create_fn_proto(char *name, AstNodeList *args, char *data_type);
-AstNode *create_struct(char *name, AstNodeList *fields);
+AstNode *create_var(const char *name, bool mutable, AstNode *v);
+AstNode *create_fn_proto(const char *name, AstNodeList *args);
+AstNode *create_struct(const char *name, AstNodeList *fields);
 AstNode *create_fn(AstNode *prototype, AstNodeList *body);
-AstNode *create_call(char *name, AstNodeList *args);
+AstNode *create_call(const char *name, AstNodeList *args);
 AstNode *create_if(AstNode *condition, AstNodeList *true_body,
                    AstNodeList *false_body);
 AstNode *create_expr(AstOperator *operator, AstNode *lhs, AstNode *rhs);

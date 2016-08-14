@@ -45,7 +45,7 @@ typedef struct {
     TokenType type;
 } Keyword;
 
-Lexer *lex(char *target_file, char *source);
+Lexer *lex(const char *target_file, const char *source);
 void destroy_lexer(Lexer *lexer);
 
 #endif /* !LEXER_H */

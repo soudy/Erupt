@@ -48,7 +48,7 @@ const Keyword keywords[] = {
     { "else"   , ELSE },
 };
 
-Lexer *lex(char *target, char *source)
+Lexer *lex(const char *target, const char *source)
 {
     char c;
     Lexer *l = create_lexer(target, source);
