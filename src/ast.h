@@ -154,7 +154,7 @@ struct AstNodeList {
 
 AstNode *create_int(int v);
 AstNode *create_float(float v);
-AstNode *create_string(char *v);
+AstNode *create_string(const char *v);
 AstNode *create_array(AstNodeList *values);
 AstNode *create_var(const char *name, bool mutable, AstNode *v);
 AstNode *create_fn_proto(const char *name, AstNodeList *args);
