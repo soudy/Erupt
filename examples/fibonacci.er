@@ -1,0 +1,10 @@
+use IO
+
+fibo(x) =>
+  match x ->
+    0 -> 0,
+    1 -> 1,
+    n -> fib(n - 1) + fib(n - 2)
+
+main(..args) =>
+  fibo(args[1]) |> IO.print

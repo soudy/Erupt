@@ -1,0 +1,9 @@
+use IO
+
+fact(x) =>
+  match x ->
+    0 -> 0,
+    n -> n * fact(n-1)
+
+main(..args) =>
+  fact(args[1]) |> IO.print
