@@ -27,14 +27,14 @@
 
 MU_TEST(tokens)
 {
-    Lexer *lexer = lex(
+    lexer_t *lexer = lex(
         "test",
         "+ += - -= | |= ^ ^= & &= ~ << <<= >> >>= and or / /= * *= ** **= % %= "
         "! != < <= > >= = == |> () [] {} . ; : => -> , 1000 3.14 \"string\" 's'"
         "identifier if unless else match module return"
     );
 
-    TokenType expected[] = {
+    token_type_t expected[] = {
         PLUS, PLUS_EQ, MIN, MIN_EQ, B_OR, B_OR_EQ, B_XOR, B_XOR_EQ, B_AND,
         B_AND_EQ, B_NOT, L_SHIFT, L_SHIFT_EQ, R_SHIFT, R_SHIFT_EQ, AND, OR,
         SLASH, SLASH_EQ, STAR, STAR_EQ, STAR_STAR, STAR_STAR_EQ, MOD,
@@ -54,7 +54,7 @@ MU_TEST(tokens)
 
 MU_TEST(comments)
 {
-    Lexer *lexer = lex("test", "%% I should be ignored!");
+    lexer_t *lexer = lex("test", "%% I should be ignored!");
     mu_assert(is(lexer->ts, _EOF), "comment gets tokenized");
 
     destroy_lexer(lexer);

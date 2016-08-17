@@ -22,20 +22,20 @@
 
 #include "lexer.h"
 
-static Lexer *create_lexer(const char *target, const char *source);
-static char current(Lexer *l);
-static char peek(Lexer *l);
-static char eat(Lexer *l);
-static void emit(Lexer *l, TokenType type);
+static lexer_t *create_lexer(const char *target, const char *source);
+static char current(lexer_t *l);
+static char peek(lexer_t *l);
+static char eat(lexer_t *l);
+static void emit(lexer_t *l, token_type_t type);
 static bool is_number(char c);
 static bool is_ident(char c);
 static bool is_whitespace(char c);
-static void read_string(Lexer *l, char id);
-static void read_number(Lexer *l);
-static void read_ident(Lexer *l);
-static void read_comment(Lexer *l);
-static void switch_eq(Lexer *l, TokenType tok_a, TokenType tok_b);
-static char *current_token(Lexer *l);
+static void read_string(lexer_t *l, char id);
+static void read_number(lexer_t *l);
+static void read_ident(lexer_t *l);
+static void read_comment(lexer_t *l);
+static void switch_eq(lexer_t *l, token_type_t tok_a, token_type_t tok_b);
+static char *current_token(lexer_t *l);
 
 const Keyword keywords[] = {
     { "and"    , AND },
@@ -48,10 +48,10 @@ const Keyword keywords[] = {
     { "else"   , ELSE },
 };
 
-Lexer *lex(const char *target, const char *source)
+lexer_t *lex(const char *target, const char *source)
 {
     char c;
-    Lexer *l = create_lexer(target, source);
+    lexer_t *l = create_lexer(target, source);
 
     verbose_printf("starting lexical analysis");
 
@@ -172,9 +172,9 @@ Lexer *lex(const char *target, const char *source)
     return l;
 }
 
-static Lexer *create_lexer(const char *target, const char *source)
+static lexer_t *create_lexer(const char *target, const char *source)
 {
-    Lexer *l = smalloc(sizeof(Lexer));
+    lexer_t *l = smalloc(sizeof(lexer_t));
 
     l->target = target;
     l->source = source;
@@ -188,17 +188,17 @@ static Lexer *create_lexer(const char *target, const char *source)
     return l;
 }
 
-static char current(Lexer *l)
+static char current(lexer_t *l)
 {
     return l->source[l->pos - 1];
 }
 
-static char peek(Lexer *l)
+static char peek(lexer_t *l)
 {
     return l->source[l->pos];
 }
 
-static char eat(Lexer *l)
+static char eat(lexer_t *l)
 {
     /* assign before advancing, avoiding fencepost errors */
     char c = peek(l);
@@ -208,10 +208,10 @@ static char eat(Lexer *l)
     return c;
 }
 
-static void emit(Lexer *l, TokenType type)
+static void emit(lexer_t *l, token_type_t type)
 {
     char *value = current_token(l);
-    Token *token = new_token(type, value, l->start, l->pos, l->line_n);
+    token_t *token = new_token(type, value, l->start, l->pos, l->line_n);
 
     token->prev = NULL;
     token->next = NULL;
@@ -240,7 +240,7 @@ static bool is_whitespace(char c)
     return c == ' ' || c == '\t' || c == '\r';
 }
 
-static void read_string(Lexer *l, char id)
+static void read_string(lexer_t *l, char id)
 {
     while (eat(l) != id) {
         /* allow escaped quotation chars in strings */
@@ -258,9 +258,9 @@ static void read_string(Lexer *l, char id)
     emit(l, STRING);
 }
 
-static void read_number(Lexer *l)
+static void read_number(lexer_t *l)
 {
-    TokenType type = INT;
+    token_type_t type = INT;
 
     while (is_number(peek(l))) {
         if (peek(l) == '.')
@@ -272,7 +272,7 @@ static void read_number(Lexer *l)
     emit(l, type);
 }
 
-static void read_ident(Lexer *l)
+static void read_ident(lexer_t *l)
 {
     while (is_ident(peek(l)) || is_number(peek(l)))
         eat(l);
@@ -291,7 +291,7 @@ static void read_ident(Lexer *l)
     emit(l, IDENT);
 }
 
-static void read_comment(Lexer *l)
+static void read_comment(lexer_t *l)
 {
     while (1) {
         if (peek(l) == EOF)
@@ -307,7 +307,7 @@ static void read_comment(Lexer *l)
     }
 }
 
-static void switch_eq(Lexer *l, TokenType tok_a, TokenType tok_b)
+static void switch_eq(lexer_t *l, token_type_t tok_a, token_type_t tok_b)
 {
     if (peek(l) == '=') {
         eat(l);
@@ -318,7 +318,7 @@ static void switch_eq(Lexer *l, TokenType tok_a, TokenType tok_b)
     emit(l, tok_a);
 }
 
-static char *current_token(Lexer *l)
+static char *current_token(lexer_t *l)
 {
     char *value = strndup(l->source + l->start, l->pos);
 
@@ -327,7 +327,7 @@ static char *current_token(Lexer *l)
     return value;
 }
 
-void destroy_lexer(Lexer *l)
+void destroy_lexer(lexer_t *l)
 {
     if (!l)
         return;

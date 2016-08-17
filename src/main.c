@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     }
 
     /* lexical analysis */
-    Lexer *lexer = lex(TARGET_FILE, source);
+    lexer_t *lexer = lex(TARGET_FILE, source);
 
     if (SHOW_TOKENS)
         dump_tokens(lexer->ts);
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     }
 
     /* parsing */
-    Parser *parser = parse(lexer);
+    parser_t *parser = parse(lexer);
 
     if (SHOW_AST)
         dump_node_list(parser->ast);

@@ -35,11 +35,11 @@
 
 typedef struct {
     char *target;
-    Token *tok;
-    AstNodeList *ast;
+    token_t *tok;
+    ast_node_list_t *ast;
     bool failed;
-} Parser;
+} parser_t;
 
-Parser *parse(Lexer *lexer);
+parser_t *parse(lexer_t *lexer);
 
 #endif /* !PARSER_H */

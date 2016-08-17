@@ -91,10 +91,10 @@ typedef enum {
     _EOF,
 
     TOKEN_COUNT
-} TokenType;
+} token_type_t;
 
-typedef struct token {
-    TokenType type;
+typedef struct token_t {
+    token_type_t type;
 
     char *value;
     size_t line_n;
@@ -102,17 +102,17 @@ typedef struct token {
     size_t start;
     size_t end;
 
-    struct token *prev;
-    struct token *next;
-} Token;
+    struct token_t *prev;
+    struct token_t *next;
+} token_t;
 
-#define NULL_TOKEN (Token) { ERROR, NULL, 0, 0, 0, NULL, NULL }
+#define NULL_TOKEN (token_t) { ERROR, NULL, 0, 0, 0, NULL, NULL }
 
-Token *new_token(TokenType type, const char *value, size_t start, size_t end,
-                 size_t line_n);
-void dump_tokens(Token *tok);
-char *token_to_string(TokenType type);
-bool is(Token *tok, TokenType type);
-void destroy_tokens(Token *ts);
+token_t *new_token(token_type_t type, const char *value, size_t start,
+                   size_t end, size_t line_n);
+void dump_tokens(token_t *tok);
+char *token_to_string(token_type_t type);
+bool is(token_t *tok, token_type_t type);
+void destroy_tokens(token_t *ts);
 
 #endif /* !TOKEN_H */

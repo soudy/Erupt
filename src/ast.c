@@ -23,9 +23,9 @@
 #include "ast.h"
 #include "erupt.h"
 
-AstNode *create_int(int v)
+ast_node_t *create_int(int v)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_INT;
     node->int_num.v = v;
@@ -33,9 +33,9 @@ AstNode *create_int(int v)
     return node;
 }
 
-AstNode *create_float(float v)
+ast_node_t *create_float(float v)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_FLOAT;
     node->float_num.v = v;
@@ -43,9 +43,9 @@ AstNode *create_float(float v)
     return node;
 }
 
-AstNode *create_string(const char *v)
+ast_node_t *create_string(const char *v)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_STRING;
     node->string.v = strdup(v);
@@ -53,9 +53,9 @@ AstNode *create_string(const char *v)
     return node;
 }
 
-AstNode *create_array(AstNodeList *values)
+ast_node_t *create_array(ast_node_list_t *values)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_ARRAY;
     node->array.values = values;
@@ -63,9 +63,9 @@ AstNode *create_array(AstNodeList *values)
     return node;
 }
 
-AstNode *create_var(const char *name, bool mutable, AstNode *v)
+ast_node_t *create_var(const char *name, bool mutable, ast_node_t *v)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_VAR;
     node->var.name = strdup(name);
@@ -75,9 +75,9 @@ AstNode *create_var(const char *name, bool mutable, AstNode *v)
     return node;
 }
 
-AstNode *create_fn_proto(const char *name, AstNodeList *args)
+ast_node_t *create_fn_proto(const char *name, ast_node_list_t *args)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_PROTO;
     node->prototype.name = strdup(name);
@@ -86,9 +86,9 @@ AstNode *create_fn_proto(const char *name, AstNodeList *args)
     return node;
 }
 
-AstNode *create_struct(const char *name, AstNodeList *fields)
+ast_node_t *create_struct(const char *name, ast_node_list_t *fields)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_STRUCT;
     node->struct_stmt.name = strdup(name);
@@ -97,9 +97,9 @@ AstNode *create_struct(const char *name, AstNodeList *fields)
     return node;
 }
 
-AstNode *create_fn(AstNode *prototype, AstNodeList *body)
+ast_node_t *create_fn(ast_node_t *prototype, ast_node_list_t *body)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_FN;
     node->fn.prototype = prototype;
@@ -108,9 +108,9 @@ AstNode *create_fn(AstNode *prototype, AstNodeList *body)
     return node;
 }
 
-AstNode *create_call(const char *name, AstNodeList *args)
+ast_node_t *create_call(const char *name, ast_node_list_t *args)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_CALL;
     node->call.name = strdup(name);
@@ -120,10 +120,10 @@ AstNode *create_call(const char *name, AstNodeList *args)
     return node;
 }
 
-AstNode *create_if(AstNode *condition, AstNodeList *true_body,
-                   AstNodeList *false_body)
+ast_node_t *create_if(ast_node_t *condition, ast_node_list_t *true_body,
+                   ast_node_list_t *false_body)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_IF;
     node->if_expr.condition = condition;
@@ -133,9 +133,9 @@ AstNode *create_if(AstNode *condition, AstNodeList *true_body,
     return node;
 }
 
-AstNode *create_expr(AstOperator *operator, AstNode *lhs, AstNode *rhs)
+ast_node_t *create_expr(ast_operator_t *operator, ast_node_t *lhs, ast_node_t *rhs)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_EXPR;
     node->expr.operator= operator;
@@ -145,9 +145,9 @@ AstNode *create_expr(AstOperator *operator, AstNode *lhs, AstNode *rhs)
     return node;
 }
 
-AstNode *create_return(AstNode *expr)
+ast_node_t *create_return(ast_node_t *expr)
 {
-    AstNode *node = smalloc(sizeof(AstNode));
+    ast_node_t *node = smalloc(sizeof(ast_node_t));
 
     node->type = TYPE_RETURN;
     node->return_expr.expr = expr;
@@ -155,9 +155,9 @@ AstNode *create_return(AstNode *expr)
     return node;
 }
 
-AstNodeList *create_node_list(void)
+ast_node_list_t *create_node_list(void)
 {
-    AstNodeList *nl = smalloc(sizeof(AstNodeList));
+    ast_node_list_t *nl = smalloc(sizeof(ast_node_list_t));
 
     nl->node = NULL;
     nl->next = NULL;
@@ -165,14 +165,14 @@ AstNodeList *create_node_list(void)
     return nl;
 }
 
-void swap_lists(AstNodeList *a, AstNodeList *b)
+void swap_lists(ast_node_list_t *a, ast_node_list_t *b)
 {
-    AstNodeList *tmp = a;
+    ast_node_list_t *tmp = a;
     a = b;
     b = tmp;
 }
 
-void destroy_node(AstNode *node)
+void destroy_node(ast_node_t *node)
 {
     if (!node)
         return;
@@ -243,7 +243,7 @@ void destroy_node(AstNode *node)
     free(node);
 }
 
-void destroy_ast(AstNodeList *nl)
+void destroy_ast(ast_node_list_t *nl)
 {
     if (!nl)
         return;
@@ -255,7 +255,7 @@ void destroy_ast(AstNodeList *nl)
     free(nl);
 }
 
-static void dump_node(AstNode *node)
+static void dump_node(ast_node_t *node)
 {
     if (!node)
         return;
@@ -304,7 +304,7 @@ static void dump_node(AstNode *node)
     }
 }
 
-void dump_node_list(AstNodeList *nl)
+void dump_node_list(ast_node_list_t *nl)
 {
     do {
         dump_node(nl->node);

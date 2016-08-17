@@ -22,10 +22,10 @@
 
 #include "token.h"
 
-Token *new_token(TokenType type, const char *value, size_t start, size_t end,
+token_t *new_token(token_type_t type, const char *value, size_t start, size_t end,
                  size_t line_n)
 {
-    Token *tok = smalloc(sizeof(Token));
+    token_t *tok = smalloc(sizeof(token_t));
 
     tok->type = type;
 
@@ -41,7 +41,7 @@ Token *new_token(TokenType type, const char *value, size_t start, size_t end,
     return tok;
 }
 
-char *token_to_string(TokenType type)
+char *token_to_string(token_type_t type)
 {
     const char *token_names[] = {
         "", "+", "+=", "-", "-=", "|", "|=", "^", "^=", "&", "&=", "~",
@@ -55,19 +55,19 @@ char *token_to_string(TokenType type)
     return type < TOKEN_COUNT ? token_names[type] : "???";
 }
 
-bool is(Token *tok, TokenType type)
+bool is(token_t *tok, token_type_t type)
 {
     return tok->type == type;
 }
 
-void dump_tokens(Token *tok)
+void dump_tokens(token_t *tok)
 {
     do {
         printf("(%16s): %s\n", token_to_string(tok->type), tok->value);
     } while ((tok = tok->next));
 }
 
-void destroy_tokens(Token *ts)
+void destroy_tokens(token_t *ts)
 {
     if (!ts)
         return;

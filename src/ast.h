@@ -28,94 +28,94 @@
 
 #include "lexer.h"
 
-typedef struct AstOperator AstOperator;
-typedef struct AstInt AstInt;
-typedef struct AstFloat AstFloat;
-typedef struct AstString AstString;
-typedef struct AstArray AstArray;
-typedef struct AstVar AstVar;
-typedef struct AstPrototype AstPrototype;
-typedef struct AstStruct AstStruct;
-typedef struct AstFunc AstFunc;
-typedef struct AstCall AstCall;
-typedef struct AstIf AstIf;
-typedef struct AstExpr AstExpr;
-typedef struct AstNode AstNode;
-typedef struct AstNodeList AstNodeList;
-typedef struct AstReturn AstReturn;
+typedef struct ast_operator_t ast_operator_t;
+typedef struct ast_int_t ast_int_t;
+typedef struct ast_float_t ast_float_t;
+typedef struct ast_string_t ast_string_t;
+typedef struct ast_list_t ast_list_t;
+typedef struct ast_var_t ast_var_t;
+typedef struct ast_prototype_t ast_prototype_t;
+typedef struct ast_struct_t ast_struct_t;
+typedef struct ast_function_t ast_function_t;
+typedef struct ast_call_t ast_call_t;
+typedef struct ast_if_t ast_if_t;
+typedef struct ast_expr_t ast_expr_t;
+typedef struct ast_node_t ast_node_t;
+typedef struct ast_node_list_t ast_node_list_t;
+typedef struct ast_return_t ast_return_t;
 
-typedef enum { ASSOC_LEFT, ASSOC_RIGHT, ASSOC_NONE } AstAssoc;
+typedef enum { ASSOC_LEFT, ASSOC_RIGHT, ASSOC_NONE } ast_assoc_t;
 
-struct AstOperator {
-    TokenType symbol;
+struct ast_operator_t {
+    token_type_t symbol;
     int precedence;
-    AstAssoc assoc;
+    ast_assoc_t assoc;
     bool unary;
 };
 
-struct AstNode;
-struct AstNodeList;
+struct ast_node_t;
+struct ast_node_list_t;
 
-struct AstInt {
+struct ast_int_t {
     int v;
 };
 
-struct AstFloat {
+struct ast_float_t {
     float v;
 };
 
-struct AstString {
+struct ast_string_t {
     char *v;
 };
 
-struct AstArray {
-    AstNodeList *values;
+struct ast_list_t {
+    ast_node_list_t *values;
 };
 
-struct AstVar {
+struct ast_var_t {
     char *name;
     bool mutable;
-    AstNode *v;
+    ast_node_t *v;
 };
 
-struct AstPrototype {
+struct ast_prototype_t {
     char *name;
-    AstNodeList *args;
+    ast_node_list_t *args;
 };
 
-struct AstStruct {
+struct ast_struct_t {
     char *name;
-    AstNodeList *fields;
+    ast_node_list_t *fields;
 };
 
-struct AstFunc {
-    AstNode *prototype;
-    AstNodeList *body;
+struct ast_function_t {
+    ast_node_t *prototype;
+    ast_node_list_t *body;
 };
 
-struct AstCall {
+struct ast_call_t {
     char *name;
-    AstNodeList *args;
+    ast_node_list_t *args;
 };
 
-struct AstIf {
-    AstNode *condition;
-    AstNodeList *true_body;
-    AstNodeList *false_body;
+struct ast_if_t {
+    ast_node_t *condition;
+    ast_node_list_t *true_body;
+    ast_node_list_t *false_body;
 };
 
-struct AstExpr {
-    AstOperator *operator;
+struct ast_expr_t {
+    ast_operator_t *operator;
 
-    AstNode *lhs;
-    AstNode *rhs;
+    ast_node_t *lhs;
+    ast_node_t *rhs;
 };
 
-struct AstReturn {
-    AstNode *expr;
+struct ast_return_t {
+    ast_node_t *expr;
 };
 
-struct AstNode {
+struct ast_node_t {
     enum {
         TYPE_INT,
         TYPE_FLOAT,
@@ -132,43 +132,44 @@ struct AstNode {
     } type;
 
     union {
-        AstInt int_num;
-        AstFloat float_num;
-        AstString string;
-        AstArray array;
-        AstVar var;
-        AstPrototype prototype;
-        AstStruct struct_stmt;
-        AstFunc fn;
-        AstCall call;
-        AstIf if_expr;
-        AstExpr expr;
-        AstReturn return_expr;
+        ast_int_t int_num;
+        ast_float_t float_num;
+        ast_string_t string;
+        ast_list_t array;
+        ast_var_t var;
+        ast_prototype_t prototype;
+        ast_struct_t struct_stmt;
+        ast_function_t fn;
+        ast_call_t call;
+        ast_if_t if_expr;
+        ast_expr_t expr;
+        ast_return_t return_expr;
     };
 };
 
-struct AstNodeList {
-    AstNode *node;
-    AstNodeList *next;
+struct ast_node_list_t {
+    ast_node_t *node;
+    ast_node_list_t *next;
 };
 
-AstNode *create_int(int v);
-AstNode *create_float(float v);
-AstNode *create_string(const char *v);
-AstNode *create_array(AstNodeList *values);
-AstNode *create_var(const char *name, bool mutable, AstNode *v);
-AstNode *create_fn_proto(const char *name, AstNodeList *args);
-AstNode *create_struct(const char *name, AstNodeList *fields);
-AstNode *create_fn(AstNode *prototype, AstNodeList *body);
-AstNode *create_call(const char *name, AstNodeList *args);
-AstNode *create_if(AstNode *condition, AstNodeList *true_body,
-                   AstNodeList *false_body);
-AstNode *create_expr(AstOperator *operator, AstNode *lhs, AstNode *rhs);
-AstNode *create_return(AstNode *expr);
-AstNodeList *create_node_list(void);
-void swap_lists(AstNodeList *a, AstNodeList *b);
-void destroy_node(AstNode *node);
-void destroy_ast(AstNodeList *nl);
-void dump_node_list(AstNodeList *nl);
+ast_node_t *create_int(int v);
+ast_node_t *create_float(float v);
+ast_node_t *create_string(const char *v);
+ast_node_t *create_array(ast_node_list_t *values);
+ast_node_t *create_var(const char *name, bool mutable, ast_node_t *v);
+ast_node_t *create_fn_proto(const char *name, ast_node_list_t *args);
+ast_node_t *create_struct(const char *name, ast_node_list_t *fields);
+ast_node_t *create_fn(ast_node_t *prototype, ast_node_list_t *body);
+ast_node_t *create_call(const char *name, ast_node_list_t *args);
+ast_node_t *create_if(ast_node_t *condition, ast_node_list_t *true_body,
+                   ast_node_list_t *false_body);
+ast_node_t *create_expr(ast_operator_t *operator, ast_node_t *lhs,
+                        ast_node_t *rhs);
+ast_node_t *create_return(ast_node_t *expr);
+ast_node_list_t *create_node_list(void);
+void swap_lists(ast_node_list_t *a, ast_node_list_t *b);
+void destroy_node(ast_node_t *node);
+void destroy_ast(ast_node_list_t *nl);
+void dump_node_list(ast_node_list_t *nl);
 
 #endif /* !AST_H */

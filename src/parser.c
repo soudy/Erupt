@@ -23,11 +23,11 @@
 #include "parser.h"
 #include "erupt.h"
 
-Parser *parse(Lexer *l)
+parser_t *parse(lexer_t *l)
 {
     verbose_printf("generating abstract syntax tree");
 
-    Parser *p = smalloc(sizeof(Parser));
+    parser_t *p = smalloc(sizeof(parser_t));
 
     p->target = l->target;
     p->tok = l->ts;

@@ -36,16 +36,16 @@ typedef struct {
 
     bool failed;
 
-    Token *ts;
-    Token *tail;
-} Lexer;
+    token_t *ts;
+    token_t *tail;
+} lexer_t;
 
 typedef struct {
     char *name;
-    TokenType type;
+    token_type_t type;
 } Keyword;
 
-Lexer *lex(const char *target_file, const char *source);
-void destroy_lexer(Lexer *lexer);
+lexer_t *lex(const char *target_file, const char *source);
+void destroy_lexer(lexer_t *lexer);
 
 #endif /* !LEXER_H */
