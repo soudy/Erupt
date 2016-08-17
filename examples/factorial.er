@@ -1,9 +1,6 @@
 use IO
 
-fact(x) =>
-  match x ->
-    0 -> 0,
-    n -> n * fact(n-1)
+fact 0 => 0
+fact x => x * fact(x-1)
 
-main(..args) =>
-  fact(args[1]) |> IO.print
+main => fact(5) |> IO.print

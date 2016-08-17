@@ -8,7 +8,7 @@ A simple hello world program may look like this:
 ```ex
 use IO
 
-main() =>
+main =>
   IO.print("Hello world")
 ```
 
