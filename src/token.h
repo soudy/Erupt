@@ -93,7 +93,7 @@ typedef enum {
     TOKEN_COUNT
 } token_type_t;
 
-typedef struct token_t {
+typedef struct token {
     token_type_t type;
 
     char *value;
@@ -102,8 +102,8 @@ typedef struct token_t {
     size_t start;
     size_t end;
 
-    struct token_t *prev;
-    struct token_t *next;
+    struct token *prev;
+    struct token *next;
 } token_t;
 
 #define NULL_TOKEN (token_t) { ERROR, NULL, 0, 0, 0, NULL, NULL }

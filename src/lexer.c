@@ -178,10 +178,13 @@ static lexer_t *create_lexer(const char *target, const char *source)
 
     l->target = target;
     l->source = source;
+
     l->line_n = 1;
     l->start = 0;
     l->pos = 0;
+
     l->failed = false;
+
     l->ts = NULL;
     l->tail = NULL;
 

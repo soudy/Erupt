@@ -22,8 +22,8 @@
 
 #include "token.h"
 
-token_t *new_token(token_type_t type, const char *value, size_t start, size_t end,
-                 size_t line_n)
+token_t *new_token(token_type_t type, const char *value, size_t start,
+                   size_t end, size_t line_n)
 {
     token_t *tok = smalloc(sizeof(token_t));
 

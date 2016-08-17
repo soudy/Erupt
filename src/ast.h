@@ -44,12 +44,12 @@ typedef struct ast_node_t ast_node_t;
 typedef struct ast_node_list_t ast_node_list_t;
 typedef struct ast_return_t ast_return_t;
 
-typedef enum { ASSOC_LEFT, ASSOC_RIGHT, ASSOC_NONE } ast_assoc_t;
-
 struct ast_operator_t {
     token_type_t symbol;
     int precedence;
-    ast_assoc_t assoc;
+    enum {
+        ASSOC_LEFT, ASSOC_RIGHT, ASSOC_NONE
+    } assoc;
     bool unary;
 };
 
@@ -135,7 +135,7 @@ struct ast_node_t {
         ast_int_t int_num;
         ast_float_t float_num;
         ast_string_t string;
-        ast_list_t array;
+        ast_list_t list;
         ast_var_t var;
         ast_prototype_t prototype;
         ast_struct_t struct_stmt;
