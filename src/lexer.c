@@ -22,7 +22,7 @@
 
 #include "lexer.h"
 
-static Lexer *create_lexer(char *target, char *source);
+static Lexer *create_lexer(const char *target, const char *source);
 static char current(Lexer *l);
 static char peek(Lexer *l);
 static char eat(Lexer *l);
@@ -172,7 +172,7 @@ Lexer *lex(const char *target, const char *source)
     return l;
 }
 
-static Lexer *create_lexer(char *target, char *source)
+static Lexer *create_lexer(const char *target, const char *source)
 {
     Lexer *l = smalloc(sizeof(Lexer));
 
@@ -278,7 +278,7 @@ static void read_ident(Lexer *l)
         eat(l);
 
     /* the read ident might be a reserved keyword */
-    char *ident = current_token(l);
+    const char *ident = current_token(l);
     size_t n_keywords = sizeof keywords / sizeof keywords[0];
 
     for (size_t i = 0; i < n_keywords; ++i) {
