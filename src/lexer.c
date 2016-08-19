@@ -37,7 +37,7 @@ static void read_comment(lexer_t *l);
 static void switch_eq(lexer_t *l, token_type_t tok_a, token_type_t tok_b);
 static char *current_token(lexer_t *l);
 
-const Keyword keywords[] = {
+static const keyword_t keywords[] = {
     { "and"    , AND },
     { "or"     , OR },
     { "module" , MODULE },
@@ -213,7 +213,7 @@ static char eat(lexer_t *l)
 
 static void emit(lexer_t *l, token_type_t type)
 {
-    char *value = current_token(l);
+    const char *value = current_token(l);
     token_t *token = new_token(type, value, l->start, l->pos, l->line_n);
 
     token->prev = NULL;
@@ -334,6 +334,8 @@ void destroy_lexer(lexer_t *l)
 {
     if (!l)
         return;
+
+    verbose_printf("destroying lexer");
 
     if (l->ts)
         destroy_tokens(l->ts);

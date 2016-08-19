@@ -53,12 +53,12 @@ ast_node_t *create_string(const char *v)
     return node;
 }
 
-ast_node_t *create_array(ast_node_list_t *values)
+ast_node_t *create_list(ast_node_list_t *values)
 {
     ast_node_t *node = smalloc(sizeof(ast_node_t));
 
-    node->type = TYPE_ARRAY;
-    node->array.values = values;
+    node->type = TYPE_LIST;
+    node->list.values = values;
 
     return node;
 }
@@ -183,9 +183,9 @@ void destroy_node(ast_node_t *node)
     case TYPE_STRING:
         free(node->string.v);
         break;
-    case TYPE_ARRAY:
-        if (node->array.values)
-            destroy_ast(node->array.values);
+    case TYPE_LIST:
+        if (node->list.values)
+            destroy_ast(node->list.values);
         break;
     case TYPE_VAR:
         free(node->var.name);
@@ -248,11 +248,15 @@ void destroy_ast(ast_node_list_t *nl)
     if (!nl)
         return;
 
+    verbose_printf("destroying AST");
+
     do {
         destroy_node(nl->node);
     } while ((nl = nl->next));
 
     free(nl);
+
+    verbose_printf("destroyed AST");
 }
 
 static void dump_node(ast_node_t *node)
@@ -264,9 +268,9 @@ static void dump_node(ast_node_t *node)
     case TYPE_INT: printf("int:\n\tvalue: %d\n", node->int_num.v); break;
     case TYPE_FLOAT: printf("float:\n\tvalue: %f\n", node->float_num.v); break;
     case TYPE_STRING: printf("string:\n\tvalue: %s\n", node->string.v); break;
-    case TYPE_ARRAY:
-        printf("array:\n\t");
-        dump_node_list(node->array.values);
+    case TYPE_LIST:
+        printf("list:\n\t");
+        dump_node_list(node->list.values);
         break;
     case TYPE_VAR:
         printf("variable:\n\tname: %s\n\tmutable:%d\n",

@@ -43,7 +43,7 @@ typedef struct {
 typedef struct {
     char *name;
     token_type_t type;
-} Keyword;
+} keyword_t;
 
 lexer_t *lex(const char *target_file, const char *source);
 void destroy_lexer(lexer_t *lexer);

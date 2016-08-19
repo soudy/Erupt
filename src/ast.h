@@ -120,7 +120,7 @@ struct ast_node_t {
         TYPE_INT,
         TYPE_FLOAT,
         TYPE_STRING,
-        TYPE_ARRAY,
+        TYPE_LIST,
         TYPE_VAR,
         TYPE_PROTO,
         TYPE_STRUCT,
@@ -155,7 +155,7 @@ struct ast_node_list_t {
 ast_node_t *create_int(int v);
 ast_node_t *create_float(float v);
 ast_node_t *create_string(const char *v);
-ast_node_t *create_array(ast_node_list_t *values);
+ast_node_t *create_list(ast_node_list_t *values);
 ast_node_t *create_var(const char *name, bool mutable, ast_node_t *v);
 ast_node_t *create_fn_proto(const char *name, ast_node_list_t *args);
 ast_node_t *create_struct(const char *name, ast_node_list_t *fields);
