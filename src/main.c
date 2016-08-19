@@ -26,24 +26,31 @@
 #include "erupt.h"
 #include "parser.h"
 
+static void eval(const char *path, const char *source);
 static int get_options(int argc, char *argv[]);
 static char *read_path(const char *path);
 static char *read_file(const FILE *handler);
 
-#define USAGE                                          \
-    "Usage: erupt [options] file\n"                    \
-    "       -o, --output\n"                            \
-    "               set output path (default: main)\n" \
-    "       -v, --version\n"                           \
-    "               show version\n"                    \
-    "       -V, --verbose\n"                           \
-    "               verbose mode\n"                    \
-    "       -t, --tokens\n"                            \
-    "               show generated token stream\n"     \
-    "       -a, --ast\n"                               \
-    "               show nodes of the generated AST\n" \
-    "       -h, --help\n"                              \
-    "               show this\n"
+void usage()
+{
+    fputs(
+        "Usage: erupt [options] file\n"
+        "       -o, --output\n"
+        "               set output path (default: main)\n"
+        "       -v, --version\n"
+        "               show version\n"
+        "       -V, --verbose\n"
+        "               verbose mode\n"
+        "       -T, --tokens\n"
+        "               show generated tokens\n"
+        "       -A, --ast\n"
+        "               show nodes of the generated AST\n"
+        "       -h, --help\n"
+        "               show this\n",
+        stderr
+    );
+    exit(ERUPT_ERROR);
+}
 
 int main(int argc, char *argv[])
 {
@@ -63,8 +70,15 @@ int main(int argc, char *argv[])
         source = read_path(argv[optind]);
     }
 
+    eval(TARGET_FILE, source);
+
+    return ERUPT_OK;
+}
+
+static void eval(const char *path, const char *source)
+{
     /* lexical analysis */
-    lexer_t *lexer = lex(TARGET_FILE, source);
+    lexer_t *lexer = lex(path, source);
 
     if (SHOW_TOKENS)
         dump_tokens(lexer->ts);
@@ -82,23 +96,24 @@ int main(int argc, char *argv[])
     if (SHOW_AST)
         dump_node_list(parser->ast);
 
-    destroy_lexer(lexer);
-    destroy_ast(parser->ast);
-
-    if (parser->failed)
+    if (parser->failed) {
+        destroy_parser(parser);
+        destroy_lexer(lexer);
         erupt_fatal_error("parser error(s) occured, stopping compilation.");
+    }
 
-    return ERUPT_OK;
+    destroy_parser(parser);
+    destroy_lexer(lexer);
 }
 
 static int get_options(int argc, char *argv[])
 {
-    const struct option long_options[] = {
+    struct option long_options[] = {
         { "output"  , required_argument , NULL , 'o' },
         { "version" , no_argument       , NULL , 'v' },
         { "verbose" , no_argument       , NULL , 'V' },
-        { "tokens"  , no_argument       , NULL , 't' },
-        { "ast"     , no_argument       , NULL , 'a' },
+        { "tokens"  , no_argument       , NULL , 'T' },
+        { "ast"     , no_argument       , NULL , 'A' },
         { "help"    , no_argument       , NULL , 'h' },
         { 0         , 0                 , 0    , 0 }
     };
@@ -121,8 +136,8 @@ static int get_options(int argc, char *argv[])
             OUTPUT_NAME = optarg;
             break;
         case 'h':
-            fputs(USAGE, stderr);
-            return ERUPT_ERROR;
+            usage();
+            break;
         case 'V':
             VERBOSE = true;
             break;
@@ -133,8 +148,7 @@ static int get_options(int argc, char *argv[])
             SHOW_AST = true;
             break;
         default:
-            fputs(USAGE, stderr);
-            return ERUPT_ERROR;
+            usage();
         }
     }
 
