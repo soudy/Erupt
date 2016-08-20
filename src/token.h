@@ -113,7 +113,7 @@ typedef struct token {
 token_t *new_token(token_type_t type, const char *value, size_t start,
                    size_t end, size_t line_n);
 void dump_tokens(token_t *tok);
-char *token_str(token_type_t type);
+char *token_str(token_t *token);
 void destroy_tokens(token_t *ts);
 
 #endif /* !TOKEN_H */
