@@ -27,19 +27,21 @@
 #include "lexer.h"
 #include "token.h"
 
-#define parser_file_error(p, ...)                           \
-    do {                                                    \
-        p->failed = true;                                   \
-        file_error(p->target, p->tok->line_n, __VA_ARGS__); \
+#define parser_file_error(p, ...)                             \
+    do {                                                      \
+        p->failed = true;                                     \
+        file_error(p->target, p->token->line_n, __VA_ARGS__); \
     } while (0);
 
 typedef struct {
     char *target;
-    token_t *tok;
+    token_t *token;
     ast_node_list_t *ast;
+
     bool failed;
 } parser_t;
 
-parser_t *parse(lexer_t *lexer);
+parser_t *parse(lexer_t *l);
+void destroy_parser(parser_t *p);
 
 #endif /* !PARSER_H */
