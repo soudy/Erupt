@@ -38,14 +38,16 @@ static void switch_eq(lexer_t *l, token_type_t tok_a, token_type_t tok_b);
 static char *current_token(lexer_t *l);
 
 static const keyword_t keywords[] = {
-    { "and"    , AND },
-    { "or"     , OR },
-    { "module" , MODULE },
-    { "return" , RETURN },
-    { "if"     , IF },
-    { "match"  , MATCH },
-    { "unless" , UNLESS },
-    { "else"   , ELSE },
+    { "and"     , AND },
+    { "or"      , OR },
+    { "module"  , MODULE },
+    { "return"  , RETURN },
+    { "if"      , IF },
+    { "match"   , MATCH },
+    { "unless"  , UNLESS },
+    { "else"    , ELSE },
+    { "use"     , USE },
+    { "include" , INCLUDE },
 };
 
 lexer_t *lex(const char *target, const char *source)

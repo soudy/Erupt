@@ -41,7 +41,7 @@ token_t *new_token(token_type_t type, const char *value, size_t start,
     return tok;
 }
 
-char *token_to_string(token_type_t type)
+char *token_str(token_type_t type)
 {
     const char *token_names[] = {
         "", "+", "+=", "-", "-=", "|", "|=", "^", "^=", "&", "&=", "~",
@@ -49,21 +49,17 @@ char *token_to_string(token_type_t type)
         "**=", "%",  "%=", "!",  "!=",  "<", "<=", ">", ">=", "=", "==", "|>",
         "(", ")", "[", "]", "{", "}", ".", ";", ":", "=>", "->", ",",
         "integer", "float", "string", "identifier", "if", "unless", "else",
-        "match", "module", "return", "error", "new line", "eof"
+        "match", "module", "return", "use", "include", "error", "new line",
+        "eof"
     };
 
     return type < TOKEN_COUNT ? token_names[type] : "???";
 }
 
-bool is(token_t *tok, token_type_t type)
-{
-    return tok->type == type;
-}
-
 void dump_tokens(token_t *tok)
 {
     do {
-        printf("(%16s): %s\n", token_to_string(tok->type), tok->value);
+        printf("(%16s): %s\n", token_str(tok->type), tok->value);
     } while ((tok = tok->next));
 }
 

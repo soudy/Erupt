@@ -25,13 +25,18 @@
 #include "minunit/minunit.h"
 #include "token.h"
 
+bool is(token_t *token, token_type_t type)
+{
+    return token->type == type;
+}
+
 MU_TEST(tokens)
 {
     lexer_t *lexer = lex(
         "test",
         "+ += - -= | |= ^ ^= & &= ~ << <<= >> >>= and or / /= * *= ** **= % %= "
         "! != < <= > >= = == |> () [] {} . ; : => -> , 1000 3.14 \"string\" 's'"
-        "identifier if unless else match module return"
+        "identifier if unless else match module return use include"
     );
 
     token_type_t expected[] = {
@@ -41,7 +46,7 @@ MU_TEST(tokens)
         MOD_EQ, BANG, BANG_EQ, LT, LT_EQ, GT, GT_EQ, EQ, EQ_EQ, PIPE, L_PAREN,
         R_PAREN, L_BRACKET,  R_BRACKET, L_BRACE, R_BRACE, DOT, SEMI_COLON,
         COLON, FAT_ARROW, ARROW, COMMA, INT, FLOAT, STRING, STRING, IDENT, IF,
-        UNLESS, ELSE, MATCH, MODULE, RETURN, _EOF
+        UNLESS, ELSE, MATCH, MODULE, RETURN, USE, INCLUDE, _EOF
     };
 
     for (int i = 0; !is(lexer->ts, _EOF); i++) {
