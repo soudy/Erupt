@@ -37,6 +37,8 @@
 
 #define ERUPT_OK 0
 #define ERUPT_ERROR -1
+#define ERUPT_LEX_ERROR -2
+#define ERUPT_PARSER_ERROR -3
 
 #define erupt_error(...) error_printf("erupt", 0, ##__VA_ARGS__)
 #define file_error(file, ...) error_printf(file, ##__VA_ARGS__)
@@ -61,15 +63,10 @@
 #endif
 
 extern bool VERBOSE;
-extern bool SHOW_TOKENS;
-extern bool SHOW_AST;
-extern char *OUTPUT_NAME;
-extern char *TARGET_FILE;
 
 void *smalloc(size_t size);
 void *scalloc(size_t n, size_t size);
-void set_output_name(const char *filename);
-char *unquote(const char *s);
+const char *unquote(const char *s);
 void verbose_printf(const char *fmt, ...);
 void warning_printf(const char *m, size_t line, const char *fmt, ...);
 void error_printf(const char *m, size_t line, const char *fmt, ...);

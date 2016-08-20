@@ -26,10 +26,15 @@
 #include "erupt.h"
 #include "parser.h"
 
-static void eval(const char *path, const char *source);
+static int eval(const char *path, char *source);
+static char *generate_output_name(const char *filename);
 static int get_options(int argc, char *argv[]);
 static char *read_path(const char *path);
-static char *read_file(const FILE *handler);
+static char *read_file(FILE *handler);
+
+bool SHOW_TOKENS = false;
+bool SHOW_AST = false;
+char *OUTPUT_NAME;
 
 void usage()
 {
@@ -55,6 +60,7 @@ void usage()
 int main(int argc, char *argv[])
 {
     char *source = NULL;
+    const char *target = NULL;
 
     if (get_options(argc, argv) != ERUPT_OK)
         return ERUPT_ERROR;
@@ -62,20 +68,27 @@ int main(int argc, char *argv[])
     if (!(optind < argc))
         erupt_fatal_error("an input file is required");
 
+    /* if given target file is '-' read from stdin */
     if (strcmp(argv[optind], "-") == 0) {
-        set_output_name("stdin");
+        target = "stdin";
         source = read_file(stdin);
     } else {
-        set_output_name(argv[optind]);
+        target = argv[optind];
         source = read_path(argv[optind]);
     }
 
-    eval(TARGET_FILE, source);
+    /*
+     * if no output name is given, make the output name the name of the file
+     * without extension and folder structure.
+     */
+    if (!OUTPUT_NAME)
+        OUTPUT_NAME = generate_output_name(target);
 
-    return ERUPT_OK;
+    /* finally, evaluate the file */
+    return eval(target, source);
 }
 
-static void eval(const char *path, const char *source)
+static int eval(const char *path, char *source)
 {
     /* lexical analysis */
     lexer_t *lexer = lex(path, source);
@@ -88,6 +101,8 @@ static void eval(const char *path, const char *source)
     if (lexer->failed) {
         destroy_lexer(lexer);
         erupt_fatal_error("lexer error(s) occured, stopping compilation.");
+
+        return ERUPT_LEX_ERROR;
     }
 
     /* parsing */
@@ -100,10 +115,28 @@ static void eval(const char *path, const char *source)
         destroy_parser(parser);
         destroy_lexer(lexer);
         erupt_fatal_error("parser error(s) occured, stopping compilation.");
+
+        return ERUPT_PARSER_ERROR;
     }
 
     destroy_parser(parser);
     destroy_lexer(lexer);
+
+    return ERUPT_OK;
+}
+
+static char *generate_output_name(const char *filename)
+{
+    char *result = strdup(filename);
+
+    /* get only the file name: tests/string_error.er -> string_error.er */
+    if (strstr(result, "/")) {
+        for (char *p = strtok(result, "/"); p != NULL; p = strtok(NULL, "/"))
+            result = p;
+    }
+
+    /* remove extension if it has one */
+    return strstr(result, ".") ? strtok(result, ".") : result;
 }
 
 static int get_options(int argc, char *argv[])
@@ -122,7 +155,7 @@ static int get_options(int argc, char *argv[])
     while (1) {
         int option_index = 0;
 
-        choice = getopt_long(argc, argv, "o:vVtnh", long_options,
+        choice = getopt_long(argc, argv, "o:vVTAh", long_options,
                              &option_index);
 
         if (choice == -1)
@@ -141,10 +174,10 @@ static int get_options(int argc, char *argv[])
         case 'V':
             VERBOSE = true;
             break;
-        case 't':
+        case 'T':
             SHOW_TOKENS = true;
             break;
-        case 'a':
+        case 'A':
             SHOW_AST = true;
             break;
         default:
@@ -171,7 +204,7 @@ static char *read_path(const char *path)
     return read_file(handler);
 }
 
-static char *read_file(const FILE *handler)
+static char *read_file(FILE *handler)
 {
     char *buffer = smalloc(MAX_FILE_SIZE);
     size_t read = 0;

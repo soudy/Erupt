@@ -110,10 +110,10 @@ typedef struct token {
 
 #define NULL_TOKEN (token_t) { ERROR, NULL, 0, 0, 0, NULL, NULL }
 
-token_t *new_token(token_type_t type, const char *value, size_t start,
-                   size_t end, size_t line_n);
+token_t *new_token(token_type_t type, char *value, size_t start, size_t end,
+                   size_t line_n);
 void dump_tokens(token_t *tok);
-char *token_str(token_t *token);
+const char *token_str(token_t *token);
 void destroy_tokens(token_t *ts);
 
 #endif /* !TOKEN_H */

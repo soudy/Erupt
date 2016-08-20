@@ -27,8 +27,8 @@
 #include "token.h"
 
 typedef struct {
-    char *target;
-    char *source;
+    const char *target;
+    const char *source;
 
     size_t line_n;
     size_t start;
@@ -41,7 +41,7 @@ typedef struct {
 } lexer_t;
 
 typedef struct {
-    char *name;
+    const char *name;
     token_type_t type;
 } keyword_t;
 

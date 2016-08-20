@@ -24,10 +24,6 @@
 #include <stdarg.h>
 
 bool VERBOSE = false;
-bool SHOW_TOKENS = false;
-bool SHOW_AST = false;
-char *TARGET_FILE = "unknown";
-char *OUTPUT_NAME = "main";
 
 void *smalloc(size_t size)
 {
@@ -49,24 +45,7 @@ void *scalloc(size_t n, size_t size)
     return chunk;
 }
 
-void set_output_name(const char *filename)
-{
-    TARGET_FILE = filename;
-    char *result = strdup(filename);
-
-    /* get only the file name: tests/string_error.er -> string_error.er */
-    if (strstr(result, "/"))
-        for (char *p = strtok(result, "/"); p != NULL; p = strtok(NULL, "/"))
-            result = p;
-
-    /* remove extension (if it has one) for executable name */
-    if (strstr(result, "."))
-        OUTPUT_NAME = strtok(result, ".");
-    else
-        OUTPUT_NAME = result;
-}
-
-char *unquote(const char *s)
+const char *unquote(const char *s)
 {
     if (*s != '"')
         return s;
@@ -155,6 +134,4 @@ void fatal_error(const char *m, size_t line, const char *fmt, ...)
     printf("\n");
 
     verbose_printf("error found, stopping compilation");
-
-    exit(ERUPT_ERROR);
 }

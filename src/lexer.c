@@ -215,7 +215,7 @@ static char eat(lexer_t *l)
 
 static void emit(lexer_t *l, token_type_t type)
 {
-    const char *value = current_token(l);
+    char *value = current_token(l);
     token_t *token = new_token(type, value, l->start, l->pos, l->line_n);
 
     token->prev = NULL;
@@ -255,9 +255,12 @@ static void read_string(lexer_t *l, char id)
         if (current(l) == '\n')
             l->line_n++;
 
-        if (peek(l) == EOF)
+        if (peek(l) == EOF) {
+            /* unclosed string, exit immediately */
             file_fatal_error(l->target, l->line_n,
                              "unexpected EOF while scanning string");
+            exit(ERUPT_ERROR);
+        }
     }
 
     emit(l, STRING);

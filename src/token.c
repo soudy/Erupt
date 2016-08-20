@@ -22,26 +22,26 @@
 
 #include "token.h"
 
-token_t *new_token(token_type_t type, const char *value, size_t start,
-                   size_t end, size_t line_n)
+token_t *new_token(token_type_t type, char *value, size_t start, size_t end,
+                   size_t line_n)
 {
-    token_t *tok = smalloc(sizeof(token_t));
+    token_t *token = smalloc(sizeof(token_t));
 
-    tok->type = type;
+    token->type = type;
 
-    tok->value = value;
-    tok->line_n = line_n;
+    token->value = value;
+    token->line_n = line_n;
 
-    tok->start = start;
-    tok->end = end;
+    token->start = start;
+    token->end = end;
 
-    tok->prev = NULL;
-    tok->next = NULL;
+    token->prev = NULL;
+    token->next = NULL;
 
-    return tok;
+    return token;
 }
 
-char *token_str(token_t *token)
+const char *token_str(token_t *token)
 {
     const char *token_names[] = {
         "", "+", "+=", "-", "-=", "|", "|=", "^", "^=", "&", "&=", "~",

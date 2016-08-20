@@ -3,8 +3,7 @@ CXX?=g++
 
 PREFIX?=/usr
 
-CFLAGS=-Wall -Wextra -O2 -std=c11 `llvm-config --cflags` \
-		-Wno-discarded-qualifiers
+CFLAGS=-Wall -Wextra -O2 -std=c11 `llvm-config --cflags`
 LDFLAGS=`llvm-config --cxxflags --ldflags`
 
 CFILES=$(wildcard src/*.c)
