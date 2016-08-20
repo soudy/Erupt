@@ -62,7 +62,7 @@ static ast_node_t *parse_top_level(parser_t *p)
     case NEW_LINE:
         return NULL;
     case IDENT:
-        if (peek(p)->type == IDENT) {
+        if (peek(p)->type == IDENT || peek(p)->type == FAT_ARROW) {
             return parse_function(p);
         }
 
