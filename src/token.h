@@ -108,8 +108,6 @@ typedef struct token {
     struct token *next;
 } token_t;
 
-#define NULL_TOKEN (token_t) { ERROR, NULL, 0, 0, 0, NULL, NULL }
-
 token_t *new_token(token_type_t type, char *value, size_t start, size_t end,
                    size_t line_n);
 void dump_tokens(token_t *tok);
