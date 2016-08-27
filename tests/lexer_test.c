@@ -49,9 +49,9 @@ MU_TEST(tokens)
         UNLESS, ELSE, MATCH, MODULE, RETURN, USE, INCLUDE, _EOF
     };
 
-    for (int i = 0; !is(lexer->ts, _EOF); i++) {
-        mu_assert(is(lexer->ts, expected[i]), "mismatched token");
-        lexer->ts = lexer->ts->next;
+    for (int i = 0; !is(lexer->tokens, _EOF); i++) {
+        mu_assert(is(lexer->tokens, expected[i]), "mismatched token");
+        lexer->tokens = lexer->tokens->next;
     }
 
     destroy_lexer(lexer);
@@ -60,7 +60,7 @@ MU_TEST(tokens)
 MU_TEST(comments)
 {
     lexer_t *lexer = lex("test", "%% I should be ignored!");
-    mu_assert(is(lexer->ts, _EOF), "comment gets tokenized");
+    mu_assert(is(lexer->tokens, _EOF), "comment gets tokenized");
 
     destroy_lexer(lexer);
 }

@@ -34,7 +34,7 @@
     } while (0);
 
 typedef struct {
-    char *target;
+    const char *target;
     token_t *token;
     ast_node_list_t *ast;
 

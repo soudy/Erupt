@@ -35,7 +35,6 @@ token_t *new_token(token_type_t type, char *value, size_t start, size_t end,
     token->start = start;
     token->end = end;
 
-    token->prev = NULL;
     token->next = NULL;
 
     return token;
@@ -70,8 +69,6 @@ void destroy_tokens(token_t *ts)
 
     do {
         free(ts->value);
-
-        destroy_tokens(ts->prev);
     } while ((ts = ts->next));
 
     free(ts);

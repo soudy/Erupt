@@ -187,8 +187,8 @@ static lexer_t *create_lexer(const char *target, const char *source)
 
     l->failed = false;
 
-    l->ts = NULL;
     l->tail = NULL;
+    l->tokens = NULL;
 
     return l;
 }
@@ -218,11 +218,8 @@ static void emit(lexer_t *l, token_type_t type)
     char *value = current_token(l);
     token_t *token = new_token(type, value, l->start, l->pos, l->line_n);
 
-    token->prev = NULL;
-    token->next = NULL;
-
     if (l->tail == NULL)
-        l->ts = token;
+        l->tokens = token;
     else
         l->tail->next = token;
 
@@ -286,15 +283,18 @@ static void read_ident(lexer_t *l)
         eat(l);
 
     /* the read ident might be a reserved keyword */
-    const char *ident = current_token(l);
+    char *ident = current_token(l);
     size_t n_keywords = sizeof keywords / sizeof keywords[0];
 
     for (size_t i = 0; i < n_keywords; ++i) {
         if (strcmp(ident, keywords[i].name) == 0) {
             emit(l, keywords[i].type);
+            free(ident);
             return;
         }
     }
+
+    free(ident);
 
     emit(l, IDENT);
 }
@@ -342,11 +342,10 @@ void destroy_lexer(lexer_t *l)
 
     verbose_printf("destroying lexer");
 
-    if (l->ts)
-        destroy_tokens(l->ts);
-
-    free(l->tail);
+    if (l->tokens)
+        destroy_tokens(l->tokens);
 
     free(l);
+
     verbose_printf("destroyed lexer");
 }

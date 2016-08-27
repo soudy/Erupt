@@ -35,7 +35,7 @@ static bool is(parser_t *p, token_type_t type);
 
 parser_t *parse(lexer_t *l)
 {
-    parser_t *p = create_parser(l->target, l->ts);
+    parser_t *p = create_parser(l->target, l->tokens);
     ast_node_t *node = NULL;
 
     verbose_printf("generating abstract syntax tree");
@@ -147,8 +147,6 @@ void destroy_parser(parser_t *p)
     verbose_printf("destroying parser");
 
     destroy_ast(p->ast);
-
-    free(p->target);
 
     free(p);
 

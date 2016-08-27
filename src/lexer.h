@@ -34,10 +34,10 @@ typedef struct {
     size_t start;
     size_t pos;
 
-    bool failed;
-
-    token_t *ts;
+    token_t *tokens;
     token_t *tail;
+
+    bool failed;
 } lexer_t;
 
 typedef struct {

@@ -104,7 +104,6 @@ typedef struct token {
     size_t start;
     size_t end;
 
-    struct token *prev;
     struct token *next;
 } token_t;
 

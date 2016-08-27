@@ -65,8 +65,10 @@ int main(int argc, char *argv[])
     if (get_options(argc, argv) != ERUPT_OK)
         return ERUPT_ERROR;
 
-    if (!(optind < argc))
+    if (!(optind < argc)) {
         erupt_fatal_error("an input file is required");
+        return ERUPT_ERROR;
+    }
 
     /* if given target file is '-' read from stdin */
     if (strcmp(argv[optind], "-") == 0) {
@@ -94,7 +96,7 @@ static int eval(const char *path, char *source)
     lexer_t *lexer = lex(path, source);
 
     if (SHOW_TOKENS)
-        dump_tokens(lexer->ts);
+        dump_tokens(lexer->tokens);
 
     free(source);
 
