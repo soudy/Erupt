@@ -29,8 +29,10 @@ void *smalloc(size_t size)
 {
     void *chunk = malloc(size);
 
-    if (chunk == NULL)
+    if (chunk == NULL) {
         erupt_fatal_error("failed to allocate memory");
+        exit(ERUPT_ERROR);
+    }
 
     return chunk;
 }
@@ -39,8 +41,10 @@ void *scalloc(size_t n, size_t size)
 {
     void *chunk = calloc(n, size);
 
-    if (chunk == NULL)
+    if (chunk == NULL) {
         erupt_fatal_error("failed to allocate memory");
+        exit(ERUPT_ERROR);
+    }
 
     return chunk;
 }
