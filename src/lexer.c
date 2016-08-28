@@ -27,6 +27,7 @@ static char current(lexer_t *l);
 static char peek(lexer_t *l);
 static char eat(lexer_t *l);
 static void emit(lexer_t *l, token_type_t type);
+static void raw_emit(lexer_t *l, char *value, token_type_t type);
 static bool is_number(char c);
 static bool is_ident(char c);
 static bool is_whitespace(char c);
@@ -36,6 +37,7 @@ static void read_ident(lexer_t *l);
 static void read_comment(lexer_t *l);
 static void switch_eq(lexer_t *l, token_type_t tok_a, token_type_t tok_b);
 static char *current_token(lexer_t *l);
+static void unquote(char **s, char quote);
 
 static const keyword_t keywords[] = {
     { "and"     , AND },
@@ -215,7 +217,11 @@ static char eat(lexer_t *l)
 
 static void emit(lexer_t *l, token_type_t type)
 {
-    char *value = current_token(l);
+    raw_emit(l, current_token(l), type);
+}
+
+static void raw_emit(lexer_t *l, char *value, token_type_t type)
+{
     token_t *token = new_token(type, value, l->start, l->pos, l->line_n);
 
     if (l->tail == NULL)
@@ -260,7 +266,13 @@ static void read_string(lexer_t *l, char id)
         }
     }
 
-    emit(l, STRING);
+    /* the scanned string's value with quotes */
+    char *value = current_token(l);
+
+    /* remove quotes */
+    unquote(&value, id);
+
+    raw_emit(l, value, STRING);
 }
 
 static void read_number(lexer_t *l)
@@ -328,11 +340,22 @@ static void switch_eq(lexer_t *l, token_type_t tok_a, token_type_t tok_b)
 
 static char *current_token(lexer_t *l)
 {
-    char *value = strndup(l->source + l->start, l->pos);
+    char *value = smalloc(sizeof(char) * (l->pos - l->start));
+    strncpy(value, l->source + l->start, l->pos);
 
     value[l->pos - l->start] = '\0';
 
     return value;
+}
+
+static void unquote(char **s, char quote)
+{
+    if (**s != quote)
+        return;
+
+    memmove(*s, *s + 1, strlen(*s));
+
+    (*s)[strlen(*s) - 1] = '\0';
 }
 
 void destroy_lexer(lexer_t *l)

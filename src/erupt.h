@@ -66,7 +66,6 @@ extern bool VERBOSE;
 
 void *smalloc(size_t size);
 void *scalloc(size_t n, size_t size);
-const char *unquote(const char *s);
 void verbose_printf(const char *fmt, ...);
 void warning_printf(const char *m, size_t line, const char *fmt, ...);
 void error_printf(const char *m, size_t line, const char *fmt, ...);

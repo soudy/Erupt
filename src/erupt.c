@@ -49,19 +49,6 @@ void *scalloc(size_t n, size_t size)
     return chunk;
 }
 
-const char *unquote(const char *s)
-{
-    if (*s != '"')
-        return s;
-
-    char *unquoted = strdup(s);
-
-    unquoted++;
-    unquoted[strlen(unquoted) - 1] = 0;
-
-    return unquoted;
-}
-
 void verbose_printf(const char *fmt, ...)
 {
     if (!VERBOSE)
