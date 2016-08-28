@@ -53,10 +53,10 @@ $ erupt [options] file
        show version
 -V, --verbose
        verbose mode
--t, --tokens
-       show generated token stream
--n, --nodes
-       show nodes of the generated AST
+-T, --tokens
+       show generated tokens
+-A, --ast
+       show generated AST
 -h, --help
        show this
 ```
