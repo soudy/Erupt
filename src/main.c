@@ -26,6 +26,8 @@
 #include "erupt.h"
 #include "parser.h"
 
+#define MAX_FILE_SIZE 10000000 /* 10MB */
+
 static int eval(const char *path, char *source);
 static char *generate_output_name(const char *filename);
 static int get_options(int argc, char *argv[]);
@@ -78,6 +80,10 @@ int main(int argc, char *argv[])
         target = argv[optind];
         source = read_path(argv[optind]);
     }
+
+    /* failed to read file */
+    if (!source)
+        return ERUPT_ERROR;
 
     /*
      * if no output name is given, make the output name the name of the file
@@ -197,11 +203,21 @@ static char *read_path(const char *path)
 
     stat(path, &s);
 
-    if (!handler)
+    if (!handler) {
         erupt_fatal_error("couldn't read file '%s'", path);
+        return NULL;
+    }
 
-    if (S_ISDIR(s.st_mode))
+    if (S_ISDIR(s.st_mode)) {
         erupt_fatal_error("'%s' is a directory", path);
+        return NULL;
+    }
+
+    if (s.st_size > MAX_FILE_SIZE) {
+        erupt_fatal_error("file '%s' is too large, maximum size is %dMB",
+                          path, MAX_FILE_SIZE / 1000000);
+        return NULL;
+    }
 
     return read_file(handler);
 }

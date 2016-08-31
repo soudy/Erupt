@@ -33,7 +33,6 @@
 #include <string.h>
 
 #define ERUPT_VERSION "0.0.4"
-#define MAX_FILE_SIZE 512 * 512
 
 #define ERUPT_OK 0
 #define ERUPT_ERROR -1
