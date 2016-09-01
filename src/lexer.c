@@ -340,7 +340,7 @@ static void switch_eq(lexer_t *l, token_type_t tok_a, token_type_t tok_b)
 
 static char *current_token(lexer_t *l)
 {
-    char *value = smalloc(sizeof(char) * (l->pos - l->start));
+    char *value = smalloc(sizeof(char) * (l->pos - l->start) + 1);
     strncpy(value, l->source + l->start, l->pos);
 
     value[l->pos - l->start] = '\0';
